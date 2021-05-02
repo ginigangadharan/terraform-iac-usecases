@@ -9,7 +9,7 @@ provider "aws" {
 resource "aws_key_pair" "ec2loginkey" {
   key_name   = "login-key"
   ## change here if you are using different key pair
-  public_key = file(pathexpand("~/.ssh/id_rsa.pub")) 
+  public_key = file(pathexpand(var.ssh_key_pair_pub)) 
 }
 
 resource "aws_instance" "ansible-engine" {
@@ -35,7 +35,8 @@ resource "aws_instance" "ansible-engine" {
   provisioner "remote-exec" {
     inline = [
       #"puppet apply",
-      "echo 'ansible-engine ansible_host=${aws_instance.ansible-engine.private_dns}' >> /home/ec2-user/inventory",
+      "echo '[ansiblenode]' >> /home/ec2-user/inventory",
+      "echo 'ansible-engine ansible_host=${aws_instance.ansible-engine.private_dns} ansible_connection=local' >> /home/ec2-user/inventory",
     ]
     connection {
       type = "ssh"
