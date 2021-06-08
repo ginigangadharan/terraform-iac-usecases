@@ -23,5 +23,5 @@ output "ansible-engine" {
 output "ansible-node-1" {
   #value = file("${path.module}/id_rsa.pub") #aws_key_pair.ec2loginkey.public_key
   #value = file(pathexpand("~/.ssh/id_rsa.pub")) 
-  value = aws_instance.ansible-node.private_dns
+  value = aws_instance.ansible-node-1.private_dns
 }
