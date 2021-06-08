@@ -1,5 +1,5 @@
 ---
-# cofigure kubernetes nodes with users and access
+# cofigure ansible engine and nodes with users and access
 
 - hosts: all
   become: true
@@ -8,6 +8,34 @@
     remote_user_name: vagrant
 
   tasks:
+    - name: Set Hostname
+      hostname:
+        name: "{{ inventory_hostname }}"
+
+    - name: Configure sshd
+      lineinfile:
+        path: "/etc/ssh/sshd_config"
+        regex: "^(#)?PasswordAuthentication"
+        line: "PasswordAuthentication yes"
+        state: present
+
+    - name: Restart SSHD
+      service:
+        name: sshd
+        state: restarted
+
+    - name: Create devops user
+      user:
+        name: devops
+        password: "{{ 'devops' | password_hash('sha512') }}"
+        state: present
+
+    - name: Enable sudo access for devops user
+      copy:
+        content: "devops ALL=(ALL) NOPASSWD: ALL"
+        dest: /etc/sudoers.d/devops
+
+
     - name: Copy Sample Inventory to Vagrant user home
       copy:
         src: '/vagrant/files/sample-inventory'
@@ -16,8 +44,8 @@
       when: inventory_hostname == 'ansible-engine-1'
 
     - name: Install Packages
-      yum: 
-        name: 
+      yum:
+        name:
           - git
           - vim
         state: present
@@ -28,7 +56,7 @@
         block: |
           192.168.50.11 ansible-engine
           192.168.50.21 ansible-node-1 node1
-          192.168.50.22 ansible-node-2 node2  
+          192.168.50.22 ansible-node-2 node2
           192.168.50.23 ansible-node-2 node3
           192.168.50.24 ansible-node-2 node4
-          192.168.50.25 ansible-node-2 node5      
+          192.168.50.25 ansible-node-2 node5

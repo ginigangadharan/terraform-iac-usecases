@@ -1,5 +1,6 @@
 resource "aws_security_group" "ansible_access" {
-  name        = "ansible-lab-security-group"
+  name        = "ansible-lab-sg"
+  description = "Created by Terraform for SSH Access"
 
   ingress {
     description = "SSH Access"
