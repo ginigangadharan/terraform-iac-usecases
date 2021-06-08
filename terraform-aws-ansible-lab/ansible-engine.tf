@@ -40,6 +40,12 @@ resource "aws_instance" "ansible-engine" {
       "echo 'ansible-engine ansible_host=${aws_instance.ansible-engine.private_dns} ansible_connection=local' >> /home/ec2-user/inventory",
       "echo '[nodes]' >> /home/ec2-user/inventory",
       "echo 'node1 ansible_host=${aws_instance.ansible-node-1.private_dns}' >> /home/ec2-user/inventory",
+      "echo '[all:vars]' >> /home/ec2-user/inventory",
+      "echo 'ansible_user=devops' >> /home/ec2-user/inventory",
+      "echo 'ansible_password=devops' >> /home/ec2-user/inventory",
+      "echo 'ansible_connection=ssh' >> /home/ec2-user/inventory",
+      "echo 'ansible_ssh_private_key_file=/home/vagrant/.ssh/id_rsa' >> /home/ec2-user/inventory",
+      "echo 'ansible_ssh_extra_args= \\' -o StrictHostKeyChecking=no -o PreferredAuthentications=password \\''' >> /home/ec2-user/inventory",
     ]
     connection {
       type = "ssh"

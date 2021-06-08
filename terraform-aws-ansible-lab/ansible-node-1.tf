@@ -32,20 +32,23 @@ resource "aws_instance" "ansible-node-1" {
     }
   }
 
-  ## copy inventory
-  #provisioner "remote-exec" {
-  #  inline = [
-  #    #"puppet apply",
-  #    "echo '[ansible]' >> /home/ec2-user/inventory",
-  #    "echo 'ansible-engine ansible_host=${aws_instance.ansible-engine.private_dns} ansible_connection=local' >> /home/ec2-user/inventory",
-  #  ]
-  #  connection {
-  #    type = "ssh"
-  #    user = "ec2-user"
-  #    private_key = file(pathexpand(var.ssh_key_pair))      
-  #    host = self.public_ip
-  #  }
-  #}
+  # Add devops user
+  provisioner "remote-exec" {
+    inline = [
+      #"puppet apply",
+      "sudo useradd devops",
+      "echo -e 'devops\ndevops' | passwd devops",
+      "echo 'devops ALL=(ALL) NOPASSWD: ALL' | sudo tee /etc/sudoers.d/devops",
+      "sudo sed -i \"s/PasswordAuthentication no/PasswordAuthentication yes/g\" /etc/ssh/sshd_config",
+      "sudo systemctl restart sshd.service",
+    ]
+    connection {
+      type = "ssh"
+      user = "ec2-user"
+      private_key = file(pathexpand(var.ssh_key_pair))      
+      host = self.public_ip
+    }
+  }
 
   ## copy ansible.cfg
   #provisioner "file" {
