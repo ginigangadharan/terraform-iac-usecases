@@ -33,56 +33,56 @@ resource "aws_instance" "ansible-node-1" {
   }
 
   ## copy inventory
-  provisioner "remote-exec" {
-    inline = [
-      #"puppet apply",
-      "echo '[ansible]' >> /home/ec2-user/inventory",
-      "echo 'ansible-engine ansible_host=${aws_instance.ansible-engine.private_dns} ansible_connection=local' >> /home/ec2-user/inventory",
-    ]
-    connection {
-      type = "ssh"
-      user = "ec2-user"
-      private_key = file(pathexpand(var.ssh_key_pair))      
-      host = self.public_ip
-    }
-  }
+  #provisioner "remote-exec" {
+  #  inline = [
+  #    #"puppet apply",
+  #    "echo '[ansible]' >> /home/ec2-user/inventory",
+  #    "echo 'ansible-engine ansible_host=${aws_instance.ansible-engine.private_dns} ansible_connection=local' >> /home/ec2-user/inventory",
+  #  ]
+  #  connection {
+  #    type = "ssh"
+  #    user = "ec2-user"
+  #    private_key = file(pathexpand(var.ssh_key_pair))      
+  #    host = self.public_ip
+  #  }
+  #}
 
   ## copy ansible.cfg
-  provisioner "file" {
-    source      = "ansible.cfg"
-    destination = "/home/ec2-user/ansible.cfg"
-    connection {
-      type = "ssh"
-      user = "ec2-user"
-      private_key = file(pathexpand(var.ssh_key_pair))      
-      host = self.public_ip
-    }
-  }
+  #provisioner "file" {
+  #  source      = "ansible.cfg"
+  #  destination = "/home/ec2-user/ansible.cfg"
+  #  connection {
+  #    type = "ssh"
+  #    user = "ec2-user"
+  #    private_key = file(pathexpand(var.ssh_key_pair))      
+  #    host = self.public_ip
+  #  }
+  #}
 
   ## copy engine-config.yaml
-  provisioner "file" {
-    source      = "engine-config.yaml"
-    destination = "/home/ec2-user/engine-config.yaml"
-    connection {
-      type = "ssh"
-      user = "ec2-user"
-      private_key = file(pathexpand(var.ssh_key_pair))      
-      host = self.public_ip
-    }
-  }
+  #provisioner "file" {
+  #  source      = "engine-config.yaml"
+  #  destination = "/home/ec2-user/engine-config.yaml"
+  #  connection {
+  #    type = "ssh"
+  #    user = "ec2-user"
+  #    private_key = file(pathexpand(var.ssh_key_pair))      
+  #    host = self.public_ip
+  #  }
+  #}
 
   ## Execute Ansible Playbook
-  provisioner "remote-exec" {
-    inline = [
-      "ansible-playbook engine-config.yaml -l ansible-engine",
-    ]
-    connection {
-      type = "ssh"
-      user = "ec2-user"
-      private_key = file(pathexpand(var.ssh_key_pair))      
-      host = self.public_ip
-    }
-  }
+  #provisioner "remote-exec" {
+  #  inline = [
+  #    "ansible-playbook engine-config.yaml -l ansible-engine",
+  #  ]
+  #  connection {
+  #    type = "ssh"
+  #    user = "ec2-user"
+  #    private_key = file(pathexpand(var.ssh_key_pair))      
+  #    host = self.public_ip
+  #  }
+  #}
   #provisioner "local-exec" {
   #  command = "ansible-playbook -i '${self.public_ip},'  engine-config.yaml"
   #}
