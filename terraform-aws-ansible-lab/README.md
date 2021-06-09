@@ -66,8 +66,24 @@ aws_security_group.ansible_access: Creating...
 .
 ```
 
+## How to Access the Lab ?
+
+Terraform will show you the `Public IP` of `ansible-engine` instance and you can access the ansible-engine using that IP.
+
+- Host: Public IP of `ansible-engine`
+- Username: `devops`
+- Password: `devops`
+
+```shell
+$ ssh devops@IP_ADDRESS
+
+
+```
+
 
 ## Once you are done with lab/tests/learning destroy resources
+
+```shell
 $ terraform destroy
 ```
 

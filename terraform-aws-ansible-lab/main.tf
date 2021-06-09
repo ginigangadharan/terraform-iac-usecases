@@ -13,19 +13,13 @@ resource "aws_key_pair" "ec2loginkey" {
 }
 
 output "ansible-engine" {
-  #value = file("${path.module}/id_rsa.pub") #aws_key_pair.ec2loginkey.public_key
-  #value = file(pathexpand("~/.ssh/id_rsa.pub")) 
-  value = aws_instance.ansible-engine.private_dns
+  value = aws_instance.ansible-engine.public_ip
 }
 
 output "ansible-node-1" {
-  #value = file("${path.module}/id_rsa.pub") #aws_key_pair.ec2loginkey.public_key
-  #value = file(pathexpand("~/.ssh/id_rsa.pub")) 
-  value = aws_instance.ansible-nodes[0].private_dns
+  value = aws_instance.ansible-nodes[0].public_ip
 }
 
-#output "ansible-node-2" {
-#  #value = file("${path.module}/id_rsa.pub") #aws_key_pair.ec2loginkey.public_key
-#  #value = file(pathexpand("~/.ssh/id_rsa.pub")) 
-#  value = aws_instance.ansible-nodes[1].private_dns
-#}
+output "ansible-node-2" {
+  value = aws_instance.ansible-nodes[1].public_ip
+}
