@@ -14,7 +14,7 @@ Terraform will provision below resources and take note on details.
 - Default `region = "ap-southeast-1"` (**Singapore**), change this in `main.tf` if needed.
 - A new Security Group will be created as `ansible-lab-security-group` (which will be destroyed when you do `terraform destroy` together with all other resources)
 - All Nodes will be configured with ssh access.
-- All Nodes will be installed with ansible, git and other necessary packages.
+- All Nodes will be installed with ansible, git, vim and other necessary packages.
 - Uncomment `# sudo yum update -y` in `user-data.sh` if you need to update the nodes with latest updates.
 
 # How to use this repository
@@ -51,7 +51,6 @@ $ terraform plan
 
 ## Apply configuration - This step will spin up all necessary resources in your AWS Account
 $ terraform apply
-
 .
 .
 Do you want to perform these actions?
@@ -64,6 +63,13 @@ aws_key_pair.ec2loginkey: Creating...
 aws_security_group.ansible_access: Creating...
 .
 .
+Apply complete! Resources: 0 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+ansible-engine = 13.250.12.72
+ansible-node-1 = 13.212.78.180
+ansible-node-2 = 54.254.68.95
 ```
 
 ## How to Access the Lab ?
@@ -77,7 +83,14 @@ Terraform will show you the `Public IP` of `ansible-engine` instance and you can
 ```shell
 $ ssh devops@IP_ADDRESS
 
-
+## check ansible version
+[devops@ansible-engine ~]$ ansible --version
+ansible 2.9.21
+  config file = /etc/ansible/ansible.cfg
+  configured module search path = [u'/home/devops/.ansible/plugins/modules', u'/usr/share/ansible/plugins/modules']
+  ansible python module location = /usr/lib/python2.7/site-packages/ansible
+  executable location = /usr/bin/ansible
+  python version = 2.7.18 (default, Feb 18 2021, 06:07:59) [GCC 7.3.1 20180712 (Red Hat 7.3.1-12)]
 ```
 
 
