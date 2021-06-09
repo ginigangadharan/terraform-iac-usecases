@@ -74,11 +74,13 @@ ansible-node-2 = 54.254.68.95
 
 ## How to Access the Lab ?
 
-Terraform will show you the `Public IP` of `ansible-engine` instance and you can access the ansible-engine using that IP.
+Terraform will show you the `Public IP` of `ansible-engine` instance and you can access the ansible-engine using that IP. 
 
 - Host: Public IP of `ansible-engine`
 - Username: `devops`
 - Password: `devops`
+- You can also access other nodes using same username and password
+- `ansible-engine` to `ansible-nodes` ssh connection is already setup using password in `inventory` file.
 
 ```shell
 $ ssh devops@IP_ADDRESS
@@ -92,6 +94,7 @@ ansible 2.9.21
   executable location = /usr/bin/ansible
   python version = 2.7.18 (default, Feb 18 2021, 06:07:59) [GCC 7.3.1 20180712 (Red Hat 7.3.1-12)]
 ```
+
 
 
 ## Once you are done with lab/tests/learning destroy resources
