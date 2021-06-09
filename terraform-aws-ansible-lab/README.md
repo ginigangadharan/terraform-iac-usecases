@@ -6,7 +6,7 @@ Also check **[Terraform IaC Examples ](https://github.com/ginigangadharan/terraf
 
 ## Introduction
 
-Terraform will provision below nodes
+Terraform will provision below resources and take note on details.
 
 - 1x ec2 instance for Ansible Engine.
 - 2x ec2 instances fro Ansible managed nodes.
@@ -15,7 +15,7 @@ Terraform will provision below nodes
 - A new Security Group will be created as `ansible-lab-security-group` (which will be destroyed when you do `terraform destroy` together with all other resources)
 - All Nodes will be configured with ssh access.
 - All Nodes will be installed with ansible, git and other necessary packages.
-
+- Uncomment `# sudo yum update -y` in `user-data.sh` if you need to update the nodes with latest updates.
 
 # How to use this repository
 ## Installing Terraform
@@ -64,8 +64,21 @@ aws_key_pair.ec2loginkey: Creating...
 aws_security_group.ansible_access: Creating...
 .
 .
+```
+
 
 ## Once you are done with lab/tests/learning destroy resources
 $ terraform destroy
 ```
 
+## Appendix
+
+### Use `local-exec` if you have Ansible installed locally
+
+If you are using Linux/Mac machine and ansible is available locally, then you an use below method for executing Terraform provisioner. (Current configuration is to execute ansible playbook to execute from `ansible-engine node` itself.)
+
+```json
+  provisioner "local-exec" {
+    command = "ansible-playbook -i '${self.public_ip},'  engine-config.yaml"
+  }
+```  
