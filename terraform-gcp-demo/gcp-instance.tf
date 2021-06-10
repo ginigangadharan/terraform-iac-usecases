@@ -1,15 +1,14 @@
 provider "google" {
-  credentials = file("/home/devops/light-footing-289612-a4cac2800151.json")
-  project = "light-footing-289612"
-  region  = "us-central1"
-  zone    = "us-central1-c"
+  credentials = file("~/.gcp/mg-devops-febabc6f0c0a.json")
+  project = "mg-devops"
+  region  = "asia-southeast1" # Singapore
+  zone    = "asia-southeast1-a"
 }
 
-resource "google_compute_instance" "default" {
-  name         = "test"
+resource "google_compute_instance" "gcp_sandbox" {
+  name         = "gcp-sandbox"
   machine_type = "n1-standard-1"
   zone    = "us-central1-c"
-
   tags = ["foo", "bar"]
 
   boot_disk {
@@ -25,7 +24,6 @@ resource "google_compute_instance" "default" {
 
   network_interface {
     network = "default"
-
     access_config {
       // Ephemeral IP
     }
