@@ -36,6 +36,32 @@ resource "aws_instance" "ansible-engine" {
     }
   }
 
+  # copy engine-config.yaml
+  provisioner "file" {
+    source      = "engine-config.yaml"
+    destination = "/home/ec2-user/engine-config.yaml"
+    connection {
+      type = "ssh"
+      user = "ec2-user"
+      private_key = file(pathexpand(var.ssh_key_pair))      
+      host = self.public_ip
+    }
+  }
+
+  # Execute Ansible Playbook
+  provisioner "remote-exec" {
+    inline = [
+      "sleep 120; ansible-playbook engine-config.yaml",
+      #"sleep 120; ansible --version > newfile.txt",
+    ]
+    connection {
+      type = "ssh"
+      user = "ec2-user"
+      private_key = file(pathexpand(var.ssh_key_pair))      
+      host = self.public_ip
+    }
+  }
+
   tags = {
     Name = "ansible-engine"
   }

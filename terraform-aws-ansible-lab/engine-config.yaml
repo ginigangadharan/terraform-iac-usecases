@@ -3,48 +3,53 @@
 
 - hosts: all
   become: true
-
-  vars:
-
   tasks:
     - name: Set Hostname
       hostname:
         name: "{{ inventory_hostname }}"
 
-    #- name: Configure sshd
-    #  lineinfile:
-    #    path: "/etc/ssh/sshd_config"
-    #    regex: "^(#)?PasswordAuthentication"
-    #    line: "PasswordAuthentication yes"
+    #- name: Install Packages
+    #  yum:
+    #    name:
+    #      - vim
     #    state: present
-#
-    #- name: Restart sshd
-    #  service:
-    #    name: sshd
-    #    state: restarted
+  
+    - name: Create .ssh if not exist
+      file:
+        path: /home/devops/.ssh
+        state: directory
+        owner: devops
+        group: devops
+        mode: 0700
 
-    #- name: Create devops user
-    #  user:
-    #    name: devops
-    #    password: "{{ 'devops' | password_hash('sha512') }}"
-    #    state: present
-#
-    #- name: Enable sudo access for devops user
-    #  copy:
-    #    content: "devops ALL=(ALL) NOPASSWD: ALL"
-    #    dest: /etc/sudoers.d/devops
-#
+    - name: Create authorized_keys if not exist
+      copy:
+        dest: /home/devops/.ssh/authorized_keys
+        content: ""
+        force: no
+        owner: devops 
+        group: devops
+        mode: '0600'
 
-    #- name: Copy Sample Inventory to Vagrant user home
-    #  copy:
-    #    src: '/vagrant/files/sample-inventory'
-    #    dest: "/home/{{ remote_user_name }}/inventory"
-    #    mode: '0755'
-    #  when: inventory_hostname == 'ansible-engine-1'
+    - name: Copy Authorized keys to devops user
+      blockinfile:
+        path: /home/devops/.ssh/authorized_keys
+        block:  "{{ lookup('file', '/home/ec2-user/.ssh/authorized_keys') 
+}}"
+    - name: Copy Sample Inventory to devops home
+      copy:
+        src: '/home/ec2-user/inventory'
+        dest: "/home/devops/inventory"
+        mode: '0755'
+        owner: devops
+        group: devops
+      when: inventory_hostname == 'ansible-engine'
 
-    - name: Install Packages
-      yum:
-        name:
-          - git
-          - vim
-        state: present
+    - name: Copy ansible.cfg to devops home
+      copy:
+        src: '/home/ec2-user/ansible.cfg'
+        dest: "/home/devops/ansible.cfg"
+        mode: '0755'
+        owner: devops
+        group: devops
+      when: inventory_hostname == 'ansible-engine'
