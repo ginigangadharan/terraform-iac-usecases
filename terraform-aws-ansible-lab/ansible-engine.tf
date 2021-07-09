@@ -4,7 +4,7 @@ resource "aws_instance" "ansible-engine" {
   instance_type = "t2.micro"
   key_name      = aws_key_pair.ec2loginkey.key_name
   ## If you are creating Instances in a VPC, use vpc_security_group_ids instead.
-  security_groups = ["ansible-lab-security-group"]
+  security_groups = ["ansible-lab-sg"]
   user_data = file("user-data-ansible-engine.sh")
 
   # Create inventory and ansible.cfg on ansible-engine
