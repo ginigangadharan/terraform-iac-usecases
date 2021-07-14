@@ -53,3 +53,9 @@
         owner: devops
         group: devops
       when: inventory_hostname == 'ansible-engine'
+
+    - name: Update /etc/hosts
+      lineinfile:
+        line: "{{ hostvars[item]['ansible_default_ipv4']['address'] }} {{ item }}"
+        path: /etc/hosts
+      loop: "{{ groups['all'] }}"
